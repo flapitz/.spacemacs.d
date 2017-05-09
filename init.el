@@ -325,6 +325,16 @@ you should place your code here."
    ;; Basic
    evil-escape-delay 0.5
 
+   ;; Avy
+   (set-face-foreground 'avy-lead-face "#FFFFFF")
+   (set-face-background 'avy-lead-face "#FF0000")
+   (set-face-foreground 'avy-lead-face-0 "#FFFFFF")
+   (set-face-background 'avy-lead-face-0 "#FF0000")
+   (set-face-foreground 'avy-lead-face-1 "#FFFFFF")
+   (set-face-background 'avy-lead-face-1 "#FF0000")
+   (set-face-foreground 'avy-lead-face-2 "#FFFFFF")
+   (set-face-background 'avy-lead-face-2 "#FF0000")
+
    ;; Javascript/Web
    js2-basic-offset 2
    js-indent-level 2

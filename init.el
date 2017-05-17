@@ -320,12 +320,8 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq-default
-
-   ;; Basic
-   evil-escape-delay 0.5
-
-   ;; Avy
+  ;; Avy
+  (with-eval-after-load "avy"
    (set-face-foreground 'avy-lead-face "#FFFFFF")
    (set-face-background 'avy-lead-face "#FF0000")
    (set-face-foreground 'avy-lead-face-0 "#FFFFFF")
@@ -333,7 +329,12 @@ you should place your code here."
    (set-face-foreground 'avy-lead-face-1 "#FFFFFF")
    (set-face-background 'avy-lead-face-1 "#FF0000")
    (set-face-foreground 'avy-lead-face-2 "#FFFFFF")
-   (set-face-background 'avy-lead-face-2 "#FF0000")
+   (set-face-background 'avy-lead-face-2 "#FF0000"))
+
+  (setq-default
+
+   ;; Basic
+   evil-escape-delay 0.5
 
    ;; Javascript/Web
    js2-basic-offset 2

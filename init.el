@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     shell-scripts
      csv
      vimscript
      yaml
@@ -72,6 +73,8 @@ values."
      emacs-lisp
      restclient
      terraform
+     extra-langs
+     prettier
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -362,6 +365,10 @@ you should place your code here."
    dotspacemacs-distinguish-gui-tab t  ;; Prevents treating C-i as tab, so we can use it to jump forward
    evil-escape-delay 0.5
    create-lockfiles nil
+   shell-file-name "/bin/bash" ;; Prevents projectile file search from being painfully slow
+
+   ;; Projectile -- an alternative solution for the sluggish projectile file search issue, but caching means possibly missing files
+   ;; projectile-enable-caching t
 
    ;; Javascript/Web
    js2-basic-offset 2
@@ -438,6 +445,18 @@ you should place your code here."
   (define-key evil-visual-state-map (kbd "H") 'evil-beginning-of-line)
   (define-key evil-normal-state-map (kbd "L") 'evil-end-of-line)
   (define-key evil-visual-state-map (kbd "L") 'evil-end-of-line)
+
+  (define-key evil-normal-state-map (kbd "zj") 'scroll-up-line)
+  (define-key evil-normal-state-map (kbd "zk") 'scroll-down-line)
+
+  ;; Custom Functions
+  (defun visit-test (source)
+    (interactive (list
+                  (read-file-name "Source: " nil nil nil (file-name-nondirectory (buffer-file-name)))))
+    (let ((source-path (substring source (length (concat (magit-toplevel source) "/src")))))
+      (let ((test-file (concat (magit-toplevel source) "test/unit/" (file-name-sans-extension source-path) ".test." (file-name-extension source-path))))
+        (message "Visiting Test: %s" test-file)
+        (find-file test-file))))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -449,7 +468,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (lv transient csv-mode terraform-mode hcl-mode helm-org-rifle org-category-capture company-emacs-eclim eclim groovy-mode android-mode yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe vagrant-tramp vagrant uuidgen use-package toc-org tide typescript-mode tagedit stickyfunc-enhance srefactor spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restclient-helm restart-emacs rbenv rake rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements persp-mode pcre2el paradox spinner orgit org-projectile org-present org-pomodoro alert log4e gntp org-download org-bullets open-junk-file ob-restclient ob-http nginx-mode neotree multi-term move-text mmm-mode minitest markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode linum-relative link-hint less-css-mode js2-refactor multiple-cursors js2-mode js-doc info+ indent-guide ibuffer-projectile hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat disaster diminish diff-hl define-word dactyl-mode d-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-restclient restclient know-your-http-well company-go go-mode company-dcd ivy popwin flycheck-dmd-dub flycheck pkg-info epl company-c-headers company-anaconda company column-enforce-mode coffee-mode cmake-mode clean-aindent-mode clang-format chruby bundler inf-ruby bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed anaconda-mode pythonic aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup org-plus-contrib evil-unimpaired f s dash)))
+    (thrift stan-mode scad-mode qml-mode matlab-mode julia-mode arduino-mode insert-shebang fish-mode company-shell org-mime lv transient csv-mode terraform-mode hcl-mode helm-org-rifle org-category-capture company-emacs-eclim eclim groovy-mode android-mode yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe vagrant-tramp vagrant uuidgen use-package toc-org tide typescript-mode tagedit stickyfunc-enhance srefactor spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restclient-helm restart-emacs rbenv rake rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements persp-mode pcre2el paradox spinner orgit org-projectile org-present org-pomodoro alert log4e gntp org-download org-bullets open-junk-file ob-restclient ob-http nginx-mode neotree multi-term move-text mmm-mode minitest markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode linum-relative link-hint less-css-mode js2-refactor multiple-cursors js2-mode js-doc info+ indent-guide ibuffer-projectile hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat disaster diminish diff-hl define-word dactyl-mode d-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-restclient restclient know-your-http-well company-go go-mode company-dcd ivy popwin flycheck-dmd-dub flycheck pkg-info epl company-c-headers company-anaconda company column-enforce-mode coffee-mode cmake-mode clean-aindent-mode clang-format chruby bundler inf-ruby bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed anaconda-mode pythonic aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup org-plus-contrib evil-unimpaired f s dash)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

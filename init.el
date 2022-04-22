@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     lsp
      shell-scripts
      csv
      vimscript
@@ -366,6 +367,9 @@ you should place your code here."
 
   ;; Snippets
   (global-set-key (kbd "s-l") 'hippie-expand)
+
+  ;; LSP
+  (setq lsp-headerline-breadcrumb-enable nil)
 
   ;; Default settings
   (setq-default
